@@ -4,9 +4,13 @@ import es.progcipfpbatoi.exceptions.DatabaseErrorException;
 import es.progcipfpbatoi.exceptions.NotFoundException;
 import es.progcipfpbatoi.modelo.dto.User;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 public class SQLUserDAO implements UserDAO {
+    private              Connection connection;
+    private static final String     TABLE_NAME = "users";
+
     @Override
     public ArrayList<User> findAll() {
         return null;
