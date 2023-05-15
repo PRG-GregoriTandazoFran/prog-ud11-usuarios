@@ -1,12 +1,12 @@
-package es.progcipfpbatoi.modelo.repositorios;
+package es.progcipfpbatoi.modelo.dao;
 
 import es.progcipfpbatoi.exceptions.DatabaseErrorException;
 import es.progcipfpbatoi.exceptions.NotFoundException;
-import es.progcipfpbatoi.modelo.entidades.User;
+import es.progcipfpbatoi.modelo.dto.User;
 
 import java.util.ArrayList;
 
-public interface UserRepository {
+public interface UserDAO {
     ArrayList<User> findAll();
     ArrayList<User> findAll(String email);
 

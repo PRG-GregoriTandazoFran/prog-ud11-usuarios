@@ -2,8 +2,9 @@ package es.progcipfpbatoi.controlador;
 
 import es.progcipfpbatoi.exceptions.AlreadyExistsException;
 import es.progcipfpbatoi.exceptions.DatabaseErrorException;
-import es.progcipfpbatoi.modelo.entidades.User;
-import es.progcipfpbatoi.modelo.repositorios.UserRepository;
+import es.progcipfpbatoi.modelo.dto.User;
+import es.progcipfpbatoi.modelo.dao.UserDAO;
+import es.progcipfpbatoi.modelo.repositories.UserRepository;
 import es.progcipfpbatoi.util.AlertMessages;
 import es.progcipfpbatoi.validator.Validator;
 import javafx.event.ActionEvent;
@@ -53,14 +54,14 @@ public abstract class UserFormController implements Initializable {
     @FXML
     protected PasswordField passwordField2;
 
-    protected UserRepository userRepository;
-    private Initializable controladorPadre;
+    protected UserRepository       userDAO;
+    private   Initializable controladorPadre;
     private String vistaPadre;
 
     public UserFormController(UserRepository userRepository, Initializable controladorPadre, String vistaPadre) {
-        this.userRepository = userRepository;
+        this.userDAO          = userRepository;
         this.controladorPadre = controladorPadre;
-        this.vistaPadre = vistaPadre;
+        this.vistaPadre       = vistaPadre;
     }
 
     /**

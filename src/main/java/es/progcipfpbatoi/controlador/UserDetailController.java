@@ -1,25 +1,12 @@
 package es.progcipfpbatoi.controlador;
 
 import es.progcipfpbatoi.exceptions.DatabaseErrorException;
-import es.progcipfpbatoi.modelo.entidades.User;
-import es.progcipfpbatoi.modelo.repositorios.UserRepository;
+import es.progcipfpbatoi.modelo.dto.User;
+import es.progcipfpbatoi.modelo.dao.UserDAO;
 import es.progcipfpbatoi.util.AlertMessages;
-import es.progcipfpbatoi.validator.Validator;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class UserDetailController extends UserFormController {
@@ -28,11 +15,11 @@ public class UserDetailController extends UserFormController {
 
     public UserDetailController(
             User user,
-            UserRepository userRepository,
+            UserDAO userDAO,
             Initializable controladorPadre,
             String vistaPadre) {
 
-        super(userRepository, controladorPadre, vistaPadre);
+        super( userDAO, controladorPadre, vistaPadre);
         this.user = user;
     }
 
@@ -51,7 +38,7 @@ public class UserDetailController extends UserFormController {
 
     @Override
     protected void saveUser(User user) throws DatabaseErrorException {
-        userRepository.save(user);
+        userDAO.save(user);
         AlertMessages.mostrarAlertInformacion("Cambios guardados con éxito");
     }
 }

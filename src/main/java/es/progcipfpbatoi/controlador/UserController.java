@@ -1,18 +1,16 @@
 package es.progcipfpbatoi.controlador;
 
-import es.progcipfpbatoi.modelo.entidades.User;
-import es.progcipfpbatoi.modelo.repositorios.UserRepository;
+import es.progcipfpbatoi.modelo.dto.User;
+import es.progcipfpbatoi.modelo.dao.UserDAO;
+import es.progcipfpbatoi.modelo.repositories.UserRepository;
 import es.progcipfpbatoi.util.AlertMessages;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -33,13 +31,13 @@ public class UserController implements Initializable {
     }
 
     private ObservableList<User> getData() {
-        return FXCollections.observableArrayList(userRepository.findAll());
+        return FXCollections.observableArrayList( userRepository.findAll());
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userListView.setItems(getData());
-        userListView.setCellFactory((ListView<User> l) -> new UserListViewCellController(userListView, this, userRepository));
+        userListView.setCellFactory((ListView<User> l) -> new UserListViewCellController(userListView, this, userRepository ));
     }
 
     /**
@@ -49,7 +47,7 @@ public class UserController implements Initializable {
     @FXML
     private void goToNewUserForm(ActionEvent event) {
         try {
-            NewUserController newUserController = new NewUserController(userRepository, this, "/vistas/user_list.fxml");
+            NewUserController newUserController = new NewUserController( userRepository, this, "/vistas/user_list.fxml");
             ChangeScene.change(event, newUserController, "/vistas/user_form.fxml");
         } catch (IOException ex) {
             ex.printStackTrace();

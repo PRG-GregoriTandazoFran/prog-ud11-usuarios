@@ -1,17 +1,17 @@
-package es.progcipfpbatoi.modelo.repositorios;
+package es.progcipfpbatoi.modelo.dao;
 
 import es.progcipfpbatoi.exceptions.DatabaseErrorException;
 import es.progcipfpbatoi.exceptions.NotFoundException;
-import es.progcipfpbatoi.modelo.entidades.User;
+import es.progcipfpbatoi.modelo.dto.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class InMemoryUserRepository implements UserRepository {
+public class InMemoryUserDAO implements UserDAO {
 
     private ArrayList<User> users;
 
-    public InMemoryUserRepository() {
+    public InMemoryUserDAO() {
         users = new ArrayList<>();
         setDefaultUsers();
     }

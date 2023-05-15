@@ -3,8 +3,9 @@ package es.progcipfpbatoi.controlador;
 import es.progcipfpbatoi.exceptions.AlreadyExistsException;
 import es.progcipfpbatoi.exceptions.DatabaseErrorException;
 import es.progcipfpbatoi.exceptions.NotFoundException;
-import es.progcipfpbatoi.modelo.entidades.User;
-import es.progcipfpbatoi.modelo.repositorios.UserRepository;
+import es.progcipfpbatoi.modelo.dto.User;
+import es.progcipfpbatoi.modelo.dao.UserDAO;
+import es.progcipfpbatoi.modelo.repositories.UserRepository;
 import es.progcipfpbatoi.util.AlertMessages;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,8 +19,8 @@ public class NewUserController extends UserFormController {
     @FXML
     private Label titleLabel;
 
-    public NewUserController(UserRepository userRepository, Initializable controladorPadre, String vistaPadre) {
-        super(userRepository, controladorPadre, vistaPadre);
+    public NewUserController(UserRepository userDAO, Initializable controladorPadre, String vistaPadre) {
+        super( userDAO, controladorPadre, vistaPadre);
     }
 
     @Override
@@ -30,10 +31,10 @@ public class NewUserController extends UserFormController {
     @Override
     protected void saveUser(User user) throws AlreadyExistsException, DatabaseErrorException {
         try {
-            userRepository.getById(user.getDni());
+            userDAO.getById(user.getDni());
             throw new AlreadyExistsException("El dni del usuario ya existe");
         } catch (NotFoundException ex) {
-            userRepository.save(user);
+            userDAO.save(user);
             AlertMessages.mostrarAlertInformacion("Nuevo usuario guardado con éxito");
         }
     }
