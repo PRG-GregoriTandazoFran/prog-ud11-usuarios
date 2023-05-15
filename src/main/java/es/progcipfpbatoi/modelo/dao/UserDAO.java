@@ -7,7 +7,7 @@ import es.progcipfpbatoi.modelo.dto.User;
 import java.util.ArrayList;
 
 public interface UserDAO {
-    ArrayList<User> findAll();
+    ArrayList<User> findAll() throws DatabaseErrorException;
     ArrayList<User> findAll(String email);
 
     User getById(String dni) throws NotFoundException;

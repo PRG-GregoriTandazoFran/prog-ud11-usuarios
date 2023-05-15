@@ -15,7 +15,11 @@ public class UserRepository {
     }
 
     public ArrayList<User> findAll() {
-        return this.userRepository.findAll();
+        try {
+            return this.userRepository.findAll();
+        } catch ( DatabaseErrorException e ) {
+            throw new RuntimeException( e );
+        }
     }
 
     public ArrayList<User> findAll(String email) {
