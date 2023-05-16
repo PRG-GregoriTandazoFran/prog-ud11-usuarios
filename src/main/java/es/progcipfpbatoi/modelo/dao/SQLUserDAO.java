@@ -44,7 +44,19 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public ArrayList<User> findAll(String email) {
-        return null;
+        ArrayList<User> userContaisnEmailList = new ArrayList<>();
+        try {
+            for ( User user : findAll() ) {
+                if ( user.hasSame( email ) ) {
+                    userContaisnEmailList.add( user );
+                }
+            }
+        } catch ( DatabaseErrorException e ) {
+            System.out.println( e.getMessage() );
+        }
+
+        return userContaisnEmailList;
+
     }
 
     @Override

@@ -69,6 +69,10 @@ public class User {
         return password;
     }
 
+    public boolean hasSame(String email){
+        return this.email.equals( email );
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
