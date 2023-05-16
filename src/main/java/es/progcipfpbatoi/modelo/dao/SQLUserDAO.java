@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class SQLUserDAO implements UserDAO {
     private              Connection connection;
-    private static final        String     IP_HOST    = "ip";
+    private static final String     IP_HOST    = "ip";
     private static final String     TABLE_NAME = "users";
 
     @Override
@@ -89,6 +89,33 @@ public class SQLUserDAO implements UserDAO {
 
     }
 
+    private User update(User user) throws DatabaseErrorException {
+        String sql = String.format( "UPDATE %s SET name = ?, surname = ?, dni = ?, email = ?, zipCode = ?, mobilePhone = ?, birthday = ?, password = ? ",
+                TABLE_NAME );
+
+        try (
+                Connection connection = new MySqlConnection( IP_HOST, "users_db", "root", "1234" ).getConnection();
+                PreparedStatement statement = connection.prepareStatement( sql, PreparedStatement.RETURN_GENERATED_KEYS )
+        ) {
+            statement.setString( 1, user.getName() );
+            statement.setString( 2, user.getSurname() );
+            statement.setString( 3, user.getDni() );
+            statement.setString( 4, user.getEmail() );
+            statement.setString( 5, user.getZipCode() );
+            statement.setString( 6, user.getMobilePhone() );
+            statement.setDate( 7, Date.valueOf( user.getBirthday() ) );
+            statement.setString( 8, user.getPassword() );
+            statement.executeUpdate();
+
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+            throw new DatabaseErrorException( "Ha ocurrido un error en el acceso o conexión a la base de datos (update)" );
+        }
+
+        return user;
+    }
+
+
     @Override
     public void remove(User user) throws NotFoundException {
 
@@ -99,11 +126,11 @@ public class SQLUserDAO implements UserDAO {
         String    surname     = rs.getString( "surname" );
         String    dni         = rs.getString( "dni" );
         String    email       = rs.getString( "email" );
-        String    zipCde      = rs.getString( "zipCode" );
+        String    zipCode     = rs.getString( "zipCode" );
         String    mobilePhone = rs.getString( "mobilePhone" );
         LocalDate birthday    = rs.getDate( "birthday" ).toLocalDate();
         String    password    = rs.getString( "password" );
-        return new User( name, surname, dni, email, zipCde, mobilePhone, birthday, password );
+        return new User( name, surname, dni, email, zipCode, mobilePhone, birthday, password );
     }
 
 }
