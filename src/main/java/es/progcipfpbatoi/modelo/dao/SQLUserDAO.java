@@ -150,6 +150,18 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public void remove(User user) throws NotFoundException {
+        String sql = String.format( "DELETE FROM %s WHERE dni = ?", TABLE_NAME );
+        connection = new MySqlConnection( IP_HOST, "users_db", "root", "1234" ).getConnection();
+        try (
+                PreparedStatement statement = connection.prepareStatement( sql, PreparedStatement.RETURN_GENERATED_KEYS )
+        ) {
+            statement.setString( 3, user.getDni() );
+            statement.executeUpdate();
+
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+            throw new NotFoundException( "Usuario con " + user.getDni() + " no encontrado" );
+        }
 
     }
 
