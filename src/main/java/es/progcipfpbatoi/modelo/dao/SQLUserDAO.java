@@ -89,6 +89,38 @@ public class SQLUserDAO implements UserDAO {
 
     }
 
+    private User insert(User user) throws DatabaseErrorException {
+        String sql = String.format( "INSERT INTO %s (name, surname, dni, email, zipCode, mobilePhone, birthday, password) VALUES (?,?,?,?,?,?,?,?)",
+                TABLE_NAME );
+        connection = new MySqlConnection( IP_HOST, "user_db", "root", "1234" ).getConnection();
+
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement( sql, PreparedStatement.RETURN_GENERATED_KEYS )
+        ) {
+            preparedStatement.setString( 1, user.getName() );
+            preparedStatement.setString( 2, user.getSurname() );
+            preparedStatement.setString( 3, user.getDni() );
+            preparedStatement.setString( 4, user.getEmail() );
+            preparedStatement.setString( 5, user.getZipCode() );
+            preparedStatement.setString( 6, user.getMobilePhone() );
+            preparedStatement.setDate( 7, Date.valueOf( user.getBirthday() ) );
+            preparedStatement.setString( 8, user.getPassword() );
+            preparedStatement.executeUpdate();
+
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if ( resultSet.next() ) {
+                user.setDni( resultSet.getString( 3 ) );
+            }
+
+            return user;
+
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+            throw new DatabaseErrorException( "Ha ocurrido un error en el acceso o conexión a la base de datos (insert)" );
+        }
+    }
+
+
     private User update(User user) throws DatabaseErrorException {
         String sql = String.format( "UPDATE %s SET name = ?, surname = ?, dni = ?, email = ?, zipCode = ?, mobilePhone = ?, birthday = ?, password = ? ",
                 TABLE_NAME );

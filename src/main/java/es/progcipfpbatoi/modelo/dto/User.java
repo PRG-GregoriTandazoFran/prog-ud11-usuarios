@@ -69,6 +69,10 @@ public class User {
         return password;
     }
 
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
     public boolean hasSame(String email){
         return this.email.equals( email );
     }
