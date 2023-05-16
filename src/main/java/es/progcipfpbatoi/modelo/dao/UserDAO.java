@@ -10,7 +10,7 @@ public interface UserDAO {
     ArrayList<User> findAll() throws DatabaseErrorException;
     ArrayList<User> findAll(String email);
 
-    User getById(String dni) throws NotFoundException;
+    User getById(String dni) throws NotFoundException, DatabaseErrorException;
 
     void save(User user) throws DatabaseErrorException;
     void remove(User user) throws NotFoundException;

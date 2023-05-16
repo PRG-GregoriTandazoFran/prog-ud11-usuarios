@@ -5,15 +5,13 @@ import es.progcipfpbatoi.exceptions.NotFoundException;
 import es.progcipfpbatoi.modelo.dto.User;
 import es.progcipfpbatoi.services.MySqlConnection;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class SQLUserDAO implements UserDAO {
     private              Connection connection;
+    private static final        String     IP_HOST    = "ip";
     private static final String     TABLE_NAME = "users";
 
     @Override
@@ -21,11 +19,11 @@ public class SQLUserDAO implements UserDAO {
         String sql = String.format( "SELECT * FROM %s", TABLE_NAME );
 
         ArrayList<User> tareas = new ArrayList<>();
-        connection = new MySqlConnection( "localhost", "users_db", "root", "1234" ).getConnection();
+        connection = new MySqlConnection( IP_HOST, "users_db", "root", "1234" ).getConnection();
 
         try (
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery( sql );
+                ResultSet resultSet = statement.executeQuery( sql )
         ) {
 
             while ( resultSet.next() ) {
@@ -60,8 +58,30 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public User getById(String dni) throws NotFoundException {
-        return null;
+    public User getById(String dni) throws NotFoundException, DatabaseErrorException {
+        String sql = String.format( "SELECT * FROM %s WHERE dni = ?", TABLE_NAME );
+        connection = new MySqlConnection( IP_HOST, "users_db", "root", "1234" ).getConnection();
+
+        try (
+                PreparedStatement statement = connection.prepareStatement( sql, PreparedStatement.RETURN_GENERATED_KEYS )
+        ) {
+            statement.setString( 3, dni );
+            ResultSet resultSet = statement.executeQuery();
+
+            while ( resultSet.next() ) {
+                User user = geUserFromResultset( resultSet );
+                if ( user.getDni().equals( dni ) ) {
+                    return user;
+                }
+            }
+
+            throw new NotFoundException( "No existe un usuario con el dni " + dni );
+
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+            throw new DatabaseErrorException( "Ha ocurrido un error en el acceso o conexión a la base de datos (select)" );
+        }
+
     }
 
     @Override
