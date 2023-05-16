@@ -32,12 +32,17 @@ public class InMemoryUserDAO implements UserDAO {
         return filteredUsers;
     }
 
-    public User getById(String dni) throws NotFoundException {
+    public User getByDni(String dni) throws NotFoundException {
         User usuario = findById(dni);
         if (usuario != null) {
             return usuario;
         }
         throw new NotFoundException("User", dni);
+    }
+
+    @Override
+    public User findByDni(String dni) throws DatabaseErrorException {
+        return null;
     }
 
     private User findById(String dni) {

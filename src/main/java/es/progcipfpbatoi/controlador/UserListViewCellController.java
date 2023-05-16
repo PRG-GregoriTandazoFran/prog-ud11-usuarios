@@ -3,6 +3,7 @@ package es.progcipfpbatoi.controlador;
 import es.progcipfpbatoi.exceptions.NotFoundException;
 import es.progcipfpbatoi.modelo.dto.User;
 import es.progcipfpbatoi.modelo.dao.UserDAO;
+import es.progcipfpbatoi.modelo.repositories.UserRepository;
 import es.progcipfpbatoi.util.AlertMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,17 +36,17 @@ public class UserListViewCellController extends ListCell<User> {
     private Label zipcodeLabel;
 
     private UserController userController;
-    private UserDAO        userDAO;
+    private UserRepository        userRepository;
 
     private ListView<User> userListView;
     private User user;
 
 
-    public UserListViewCellController(ListView<User> userListView, UserController userController, UserDAO userDAO) {
+    public UserListViewCellController(ListView<User> userListView, UserController userController, UserRepository userRepository) {
 
         this.userListView   = userListView;
         this.userController = userController;
-        this.userDAO        = userDAO;
+        this.userRepository = userRepository;
 
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/vistas/user_list_item.fxml"));
@@ -78,7 +79,7 @@ public class UserListViewCellController extends ListCell<User> {
     @FXML
     private void goToEditUserForm(ActionEvent event) {
         try{
-            UserDetailController userDetailController = new UserDetailController(user, userDAO, userController, "/vistas/user_list.fxml");
+            UserDetailController userDetailController = new UserDetailController(user, userRepository, userController, "/vistas/user_list.fxml");
             ChangeScene.change(event, userDetailController, "/vistas/user_form.fxml");
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -89,7 +90,7 @@ public class UserListViewCellController extends ListCell<User> {
     @FXML
     private void deleteUser() {
         try {
-            userDAO.remove(user);
+            userRepository.remove(user);
             userListView.getItems().remove(user);
         } catch (NotFoundException ex) {
             ex.printStackTrace();

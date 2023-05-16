@@ -3,6 +3,7 @@ package es.progcipfpbatoi.controlador;
 import es.progcipfpbatoi.exceptions.DatabaseErrorException;
 import es.progcipfpbatoi.modelo.dto.User;
 import es.progcipfpbatoi.modelo.dao.UserDAO;
+import es.progcipfpbatoi.modelo.repositories.UserRepository;
 import es.progcipfpbatoi.util.AlertMessages;
 import javafx.fxml.Initializable;
 
@@ -15,11 +16,11 @@ public class UserDetailController extends UserFormController {
 
     public UserDetailController(
             User user,
-            UserDAO userDAO,
+            UserRepository userRepository,
             Initializable controladorPadre,
             String vistaPadre) {
 
-        super( userDAO, controladorPadre, vistaPadre);
+        super( userRepository, controladorPadre, vistaPadre);
         this.user = user;
     }
 

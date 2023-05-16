@@ -10,16 +10,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class SQLUserDAO implements UserDAO {
+    public static final String     IP_HOST       = "172.16.44.67";
+    public static final  String     DATABASE_NAME = "users_db";
+    public static final  String     USERNAME = "batoi";
+    public static final String     TABLE_NAME    = "user";
     private              Connection connection;
-    private static final String     IP_HOST    = "ip";
-    private static final String     TABLE_NAME = "users";
-
     @Override
     public ArrayList<User> findAll() throws DatabaseErrorException {
         String sql = String.format( "SELECT * FROM %s", TABLE_NAME );
 
         ArrayList<User> tareas = new ArrayList<>();
-        connection = new MySqlConnection( IP_HOST, "users_db", "root", "1234" ).getConnection();
+        connection = new MySqlConnection( IP_HOST, DATABASE_NAME, USERNAME, "1234" ).getConnection();
 
         try (
                 Statement statement = connection.createStatement();
@@ -58,9 +59,9 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public User getById(String dni) throws NotFoundException, DatabaseErrorException {
+    public User getByDni(String dni) throws NotFoundException, DatabaseErrorException {
         String sql = String.format( "SELECT * FROM %s WHERE dni = ?", TABLE_NAME );
-        connection = new MySqlConnection( IP_HOST, "users_db", "root", "1234" ).getConnection();
+        connection = new MySqlConnection( IP_HOST, DATABASE_NAME, USERNAME, "1234" ).getConnection();
 
         try (
                 PreparedStatement statement = connection.prepareStatement( sql, PreparedStatement.RETURN_GENERATED_KEYS )
@@ -85,14 +86,28 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public void save(User user) throws DatabaseErrorException {
+    public User findByDni(String dni) throws DatabaseErrorException {
+        try {
+            return getByDni(dni);
+        } catch (NotFoundException ex) {
+            return null;
+        }
+    }
 
+
+    @Override
+    public void save(User user) throws DatabaseErrorException {
+        if ((findByDni( user.getDni() )) == null) {
+            insert(user);
+        } else {
+            update(user);
+        }
     }
 
     private User insert(User user) throws DatabaseErrorException {
         String sql = String.format( "INSERT INTO %s (name, surname, dni, email, zipCode, mobilePhone, birthday, password) VALUES (?,?,?,?,?,?,?,?)",
                 TABLE_NAME );
-        connection = new MySqlConnection( IP_HOST, "user_db", "root", "1234" ).getConnection();
+        connection = new MySqlConnection( IP_HOST, DATABASE_NAME, USERNAME, "1234" ).getConnection();
 
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement( sql, PreparedStatement.RETURN_GENERATED_KEYS )
@@ -126,7 +141,7 @@ public class SQLUserDAO implements UserDAO {
                 TABLE_NAME );
 
         try (
-                Connection connection = new MySqlConnection( IP_HOST, "users_db", "root", "1234" ).getConnection();
+                Connection connection = new MySqlConnection( IP_HOST, DATABASE_NAME, USERNAME, "1234" ).getConnection();
                 PreparedStatement statement = connection.prepareStatement( sql, PreparedStatement.RETURN_GENERATED_KEYS )
         ) {
             statement.setString( 1, user.getName() );
@@ -151,7 +166,7 @@ public class SQLUserDAO implements UserDAO {
     @Override
     public void remove(User user) throws NotFoundException {
         String sql = String.format( "DELETE FROM %s WHERE dni = ?", TABLE_NAME );
-        connection = new MySqlConnection( IP_HOST, "users_db", "root", "1234" ).getConnection();
+        connection = new MySqlConnection( IP_HOST, DATABASE_NAME, USERNAME, "1234" ).getConnection();
         try (
                 PreparedStatement statement = connection.prepareStatement( sql, PreparedStatement.RETURN_GENERATED_KEYS )
         ) {

@@ -27,7 +27,11 @@ public class UserRepository {
     }
 
     public User getById(String dni) throws NotFoundException {
-        return this.userRepository.getById( dni );
+        try {
+            return this.userRepository.getByDni( dni );
+        } catch ( DatabaseErrorException e ) {
+            throw new RuntimeException( e );
+        }
     }
 
     public void save(User user) throws DatabaseErrorException {
