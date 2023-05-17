@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class SQLUserDAO implements UserDAO {
-    public static final String     IP_HOST       = "192.168.1.138";
+    public static final String     IP_HOST       = "172.16.32.103";
     public static final  String     DATABASE_NAME = "users_db";
     public static final  String     USERNAME = "batoi";
     public static final String     TABLE_NAME    = "user";
@@ -139,9 +139,10 @@ public class SQLUserDAO implements UserDAO {
     private User update(User user) throws DatabaseErrorException {
         String sql = String.format( "UPDATE %s SET name = ?, surname = ?, dni = ?, email = ?, zipCode = ?, mobilePhone = ?, birthday = ?, password = ? ",
                 TABLE_NAME );
-
+//sacar fuera el connection
+        Connection connection = new MySqlConnection( IP_HOST, DATABASE_NAME, USERNAME, "1234" ).getConnection();
         try (
-                Connection connection = new MySqlConnection( IP_HOST, DATABASE_NAME, USERNAME, "1234" ).getConnection();
+
                 PreparedStatement statement = connection.prepareStatement( sql, PreparedStatement.RETURN_GENERATED_KEYS )
         ) {
             statement.setString( 1, user.getName() );
