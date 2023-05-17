@@ -74,7 +74,7 @@ public class User {
     }
 
     public boolean hasSame(String email){
-        return this.email.equals( email );
+        return this.email.contains( email );
     }
 
     @Override

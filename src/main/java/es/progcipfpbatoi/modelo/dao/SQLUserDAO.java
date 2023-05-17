@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class SQLUserDAO implements UserDAO {
-    public static final String     IP_HOST       = "172.16.44.67";
+    public static final String     IP_HOST       = "192.168.1.138";
     public static final  String     DATABASE_NAME = "users_db";
     public static final  String     USERNAME = "batoi";
     public static final String     TABLE_NAME    = "user";
@@ -43,18 +43,18 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public ArrayList<User> findAll(String email) {
-        ArrayList<User> userContaisnEmailList = new ArrayList<>();
+        ArrayList<User> userContainsEmailList = new ArrayList<>();
         try {
             for ( User user : findAll() ) {
                 if ( user.hasSame( email ) ) {
-                    userContaisnEmailList.add( user );
+                    userContainsEmailList.add( user );
                 }
             }
         } catch ( DatabaseErrorException e ) {
             System.out.println( e.getMessage() );
         }
 
-        return userContaisnEmailList;
+        return userContainsEmailList;
 
     }
 
@@ -66,7 +66,7 @@ public class SQLUserDAO implements UserDAO {
         try (
                 PreparedStatement statement = connection.prepareStatement( sql, PreparedStatement.RETURN_GENERATED_KEYS )
         ) {
-            statement.setString( 3, dni );
+            statement.setString( 1, dni );
             ResultSet resultSet = statement.executeQuery();
 
             while ( resultSet.next() ) {
@@ -170,7 +170,7 @@ public class SQLUserDAO implements UserDAO {
         try (
                 PreparedStatement statement = connection.prepareStatement( sql, PreparedStatement.RETURN_GENERATED_KEYS )
         ) {
-            statement.setString( 3, user.getDni() );
+            statement.setString( 1, user.getDni() );
             statement.executeUpdate();
 
         } catch ( SQLException e ) {

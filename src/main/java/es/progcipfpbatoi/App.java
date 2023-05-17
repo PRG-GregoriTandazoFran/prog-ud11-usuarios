@@ -2,9 +2,7 @@ package es.progcipfpbatoi;
 
 import es.progcipfpbatoi.controlador.ChangeScene;
 import es.progcipfpbatoi.controlador.UserController;
-import es.progcipfpbatoi.modelo.dao.InMemoryUserDAO;
 import es.progcipfpbatoi.modelo.dao.SQLUserDAO;
-import es.progcipfpbatoi.modelo.dao.UserDAO;
 import es.progcipfpbatoi.modelo.repositories.UserRepository;
 import es.progcipfpbatoi.services.MySqlConnection;
 import javafx.application.Application;
